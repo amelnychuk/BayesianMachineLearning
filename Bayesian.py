@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import beta
 
-NUM_TRAILS = 2000
+NUM_TRIALS = 2000
 PROBABILITIES = [.3, .4, .5,.6]
 
 
@@ -36,7 +36,7 @@ def experiment():
     bandits = [Generator(p) for p in PROBABILITIES]
 
     sample_points = [5, 10, 20, 50, 100, 200, 500, 1000, 1500, 1999]
-    for i in xrange(NUM_TRAILS):
+    for i in xrange(NUM_TRIALS):
         bestb = None
         maxsample = -1
         allsamples = []
