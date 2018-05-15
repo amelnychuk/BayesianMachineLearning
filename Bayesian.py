@@ -33,24 +33,51 @@ def plot(bandits, trail):
 
 
 def experiment():
-    bandits = [Generator(p) for p in PROBABILITIES]
+    generators = [Generator(p) for p in PROBABILITIES]
 
     sample_points = [5, 10, 20, 50, 100, 200, 500, 1000, 1500, 1999]
     for i in xrange(NUM_TRIALS):
-        bestb = None
+        best_gen = None
         maxsample = -1
         allsamples = []
-        for b in bandits:
-            sample = b.sample()
+        for generator in generators:
+            sample = generator.sample()
             allsamples.append("%.4f" % sample)
             if sample > maxsample:
                 maxsample = sample
-                bestb = b
+                best_gen = generator
         if i in sample_points:
             print "Samples: %s" % allsamples
-            plot(bandits, i)
-        x = bestb.generate()
-        bestb.update(x)
+            plot(generators, i)
+        x = best_gen.generate()
+        best_gen.update(x)
+
+
+def thompson_convergence():
+    NUM_TRIALS = 20000
+
+    seeds = np.random.random(3)
+    generators = [Generator(r) for r in seeds]
+
+    data = np.empty(NUM_TRIALS)
+
+    for i in xrange(NUM_TRIALS):
+        j = np.argmax([g.sample() for g in generators])
+        x = generators[j].generate()
+        generators[j].update(x)
+        data[i] = x
+
+    cumulative_avg_ctr = np.cumsum(data) / (np.arange(NUM_TRIALS) +1)
+    plt.plot(cumulative_avg_ctr)
+
+    for seed in seeds:
+        plt.plot(np.ones(NUM_TRIALS)*seed)
+    plt.ylim((0,1))
+    plt.xscale('log')
+    plt.show()
+
+
 
 if __name__ == '__main__':
-    experiment()
+    #experiment()
+    thompson_convergence()
