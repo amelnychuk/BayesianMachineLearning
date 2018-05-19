@@ -79,5 +79,5 @@ def thompson_convergence():
 
 
 if __name__ == '__main__':
-    #experiment()
-    thompson_convergence()
+    experiment()
+    #thompson_convergence()
